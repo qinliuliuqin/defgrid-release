@@ -102,6 +102,8 @@ class cityscapesFullLoader(data.Dataset):
             self.filter_city(split)
         elif split == 'val':
             self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+        elif split == 'test'
+            self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
 
         self.files[split].sort()
         self.void_classes = [0, 1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]

@@ -27,10 +27,10 @@ def get_test_loader(resolution):
         tr.Normalize('crop_image', mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
     ])
 
-    valset = cityscapes_full.cityscapesFullLoader(split='val', transform=composed_transforms_ts)
-    val_loader = DataLoader(valset, batch_size=1, shuffle=False,
+    testset = cityscapes_full.cityscapesFullLoader(split='test', transform=composed_transforms_ts)
+    test_loader = DataLoader(testset, batch_size=1, shuffle=False,
                                  num_workers=1, drop_last=True, )
-    return val_loader
+    return test_loader
 
 
 def test_batch(model, data, data_idx, resolution, grid_size, grid_type, save_folder):
