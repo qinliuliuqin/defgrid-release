@@ -80,11 +80,8 @@ class cityscapesFullLoader(data.Dataset):
         :param img_size:
         :param augmentations
         """
-        if os.path.exists('/h/zianwang/disk/dataset/cityscapes'):
-            self.root = '/h/zianwang/disk/dataset/cityscapes'
-        elif os.path.exists('/scratch/ssd001/home/linghuan/datasets/dataset/cityscapes'):
-            self.root = '/scratch/ssd001/home/linghuan/datasets/dataset/cityscapes'
-        else:
+        self.root = '/work/data/Cityscape'
+        if not os.path.exists(self.root):
             raise ValueError('cityscapes-full data does not exist!')
         self.split = split
         self.img_norm = img_norm

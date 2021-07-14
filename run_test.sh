@@ -1,3 +1,4 @@
+export PYTHONPATH=/work/defgrid
 export CUDA_VISIBLE_DEVICES=6,7
 python3 scripts/inference/test_def_grid_full.py \
               --debug false \
