@@ -67,6 +67,7 @@ class cityscapesFullLoader(data.Dataset):
 
     def __init__(
         self,
+        root = '/work/data/Cityscape',
         split="train",
         img_size=(1024, 2048),
         img_norm=True,
@@ -80,7 +81,8 @@ class cityscapesFullLoader(data.Dataset):
         :param img_size:
         :param augmentations
         """
-        self.root = '/work/data/Cityscape'
+
+        self.root = root
         if not os.path.exists(self.root):
             raise ValueError('cityscapes-full data does not exist!')
         self.split = split
