@@ -27,7 +27,7 @@ def get_test_loader(resolution):
         tr.Normalize('crop_image', mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
     ])
 
-    set = cityscapes_full.cityscapesFullLoader(root = '/work/data/DefInput', split='test', transform=composed_transforms_ts)
+    set = cityscapes_full.cityscapesFullLoader(root = '/work/data', split='test', transform=composed_transforms_ts)
     loader = DataLoader(set, batch_size=1, shuffle=False,
                                  num_workers=1, drop_last=True, )
     return loader

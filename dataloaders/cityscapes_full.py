@@ -106,8 +106,8 @@ class cityscapesFullLoader(data.Dataset):
                 self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
             elif split == 'test':
                 self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
-        elif root == "/work/data/DefInput":
-            #self.images_base = os.path.join(self.root, "leftImg8bit", self.split)
+        elif root == "/work/data":
+            self.images_base = os.path.join(self.root, "DefInput", self.split)
             self.files[split] = recursive_glob(rootdir=self.root, suffix=".png")
 
         self.files[split].sort()
