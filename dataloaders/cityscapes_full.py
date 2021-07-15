@@ -109,7 +109,8 @@ class cityscapesFullLoader(data.Dataset):
         elif root == "/work/data/DefInput":
             self.images_base = os.path.join(self.root, "images", self.split)
             self.annotations_base = os.path.join(self.root, "gtFine", self.split)
-            self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+            if split == 'test':
+                self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
 
         self.files[split].sort()
         self.void_classes = [0, 1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]
@@ -162,7 +163,7 @@ class cityscapesFullLoader(data.Dataset):
         self.transform = transform
 
         if not self.files[split]:
-            raise Exception("No files for split=[%s] found in %s" % (split, self.images_base))
+            raise Exception("No files for split=[%s] found in %s" % (split) %"that was it" % (self.images_base))
 
         print("\nFound %d %s images" % (len(self.files[split]), split))
 
