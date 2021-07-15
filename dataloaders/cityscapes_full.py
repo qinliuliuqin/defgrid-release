@@ -91,20 +91,23 @@ class cityscapesFullLoader(data.Dataset):
         self.img_size = img_size if isinstance(img_size, tuple) else (img_size, img_size)
         self.mean = np.array(self.mean_rgb[version])
         self.files = {}
-
-        self.images_base = os.path.join(self.root, "leftImg8bit", self.split)
-        self.annotations_base = os.path.join(self.root, "gtFine", self.split)
-        if split == 'train':
-            self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
-            self.filter_city(split)
-        elif split == 'train_val':
-            self.images_base = os.path.join(self.root, "leftImg8bit", 'train')
-            self.annotations_base = os.path.join(self.root, "gtFine", 'train')
-            self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
-            self.filter_city(split)
-        elif split == 'val':
-            self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
-        elif split == 'test':
+        if root == "/work/data/Cityscape":
+            self.images_base = os.path.join(self.root, "leftImg8bit", self.split)
+            self.annotations_base = os.path.join(self.root, "gtFine", self.split)
+            if split == 'train':
+                self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+                self.filter_city(split)
+            elif split == 'train_val':
+                self.images_base = os.path.join(self.root, "leftImg8bit", 'train')
+                self.annotations_base = os.path.join(self.root, "gtFine", 'train')
+                self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+                self.filter_city(split)
+            elif split == 'val':
+                self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+            elif split == 'test':
+                self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+        elif root == "/work/data/DefInput":
+            #self.images_base = os.path.join(self.root, "leftImg8bit", self.split)
             self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
 
         self.files[split].sort()
