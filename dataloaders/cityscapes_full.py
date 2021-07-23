@@ -4,6 +4,7 @@ import numpy as np
 import scipy.misc as m
 import imageio
 import random
+import cv2
 random.seed(1234)
 
 from torch.utils import data
@@ -14,6 +15,7 @@ def recursive_glob(rootdir=".", suffix=""):
         :param rootdir is the root directory
         :param suffix is the suffix to be searched
     """
+    #print("here at recursive glob")
     return [
         os.path.join(looproot, filename)
         for looproot, _, filenames in os.walk(rootdir)
@@ -108,9 +110,16 @@ class cityscapesFullLoader(data.Dataset):
                 self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
         elif root == "/work/data/DefInput":
             self.images_base = os.path.join(self.root, "images", self.split)
-            self.annotations_base = os.path.join(self.root, "gtFine", self.split)
+            # self.annotations_base = os.path.join(self.root, "gtFine", self.split)
             if split == 'test':
                 self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+                self.files[split] += recursive_glob(rootdir=self.images_base, suffix=".jpg")
+                self.files[split] += recursive_glob(rootdir=self.images_base, suffix=".bmp")
+                #print(self.files[split])
+            if split == 'mask':
+                self.files[split] = recursive_glob(rootdir=self.images_base, suffix=".png")
+                self.files[split] += recursive_glob(rootdir=self.images_base, suffix=".jpg")
+                self.files[split] += recursive_glob(rootdir=self.images_base, suffix=".bmp")
 
         self.files[split].sort()
         self.void_classes = [0, 1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]
@@ -162,8 +171,23 @@ class cityscapesFullLoader(data.Dataset):
         self.class_map = dict(zip(self.valid_classes, range(19)))
         self.transform = transform
 
-        if not self.files[split]:
-            raise Exception("No files for split=[%s] found in %s" % (split) %"that was it" % (self.images_base))
+        #print(self.files.items()['test'])
+        self.dimension = []
+        self.images = []
+        for fi in self.files:
+            for value in self.files[fi]:
+                #print(value)
+                im=cv2.imread(value)
+                self.images.append(im)
+                self.dimension.append(im.shape)
+            #print("fi")
+            #im = cv2.imread(fi)
+            #print(im.shape)
+
+        #if not self.files[split]:
+           # num = 711
+
+           # raise Exception("No files for split=[%s] found in %s" % (split, self.images_base))
 
         print("\nFound %d %s images" % (len(self.files[split]), split))
 
@@ -185,21 +209,21 @@ class cityscapesFullLoader(data.Dataset):
         :param index:
         """
         img_path = self.files[self.split][index].rstrip()
-        lbl_path = os.path.join(
-            self.annotations_base,
-            img_path.split(os.sep)[-2],
-            os.path.basename(img_path)[:-15] + "gtFine_labelIds.png",
-        )
+        #lbl_path = os.path.join(
+          #  self.annotations_base,
+          #  img_path.split(os.sep)[-2],
+           # os.path.basename(img_path)[:-15] + "gtFine_labelIds.png",
+       # )
 
         img = imageio.imread(img_path)
         img = np.array(img, dtype=np.float32) / 255.  # normalize
 
-        lbl = imageio.imread(lbl_path)
-        lbl = self.encode_segmap(np.array(lbl, dtype=np.uint8))
+        #lbl = imageio.imread(lbl_path)
+        #lbl = self.encode_segmap(np.array(lbl, dtype=np.uint8))
 
         sample = dict()
         sample['image'] = img
-        sample['gt'] = lbl
+        # sample['gt'] = lbl
         sample = self.transform(sample)
         # print(sample['crop_image'].max(), sample['crop_image'].min())
         return sample

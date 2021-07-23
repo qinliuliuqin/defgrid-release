@@ -120,6 +120,7 @@ def plot_deformed_lattice_on_image_with_class_label(lattice_pos, ori_image, adja
 def plot_deformed_lattice_on_image(lattice_pos, image, adjacent, save_path=None, grid_pairs=None, triangles=None, mask=None,
                                    return_fig=False, boundary_p=None, obj_mask=None, matching_point=None):
     fig, ax = plt.subplots(figsize=(image.shape[1]//20, image.shape[0]//20))
+    
     ax.imshow(image)
     #for affinity merge
     if not grid_pairs is None:
@@ -175,6 +176,29 @@ def plot_deformed_lattice_on_image(lattice_pos, image, adjacent, save_path=None,
         plt.savefig(save_path)
 
 
+    if return_fig:
+        plt.close()
+        return fig
+    plt.close()
+
+def plot_points (points, image, return_fig = True, save_path = None):
+    fig, ax = plt.subplots(figsize=(image.shape[1] // 20, image.shape[0] // 20))
+
+    ax.imshow(image)
+    # for affinity merge
+    color = ['r' for i in range(points.shape[0])]
+    size = [1 for i in range(points.shape[0])]
+    #x,y = np.where(adjacent!=0)
+    #conn = zip(x,y)
+
+    #graph = nx.Graph()
+
+    #nx.draw(graph, [(x, y) for x, y in points], node_size=size, ax=ax, node_color=color)
+    for i in points:
+        ax.plot(i[0], i[1], 'bo')
+
+    if not save_path is None:
+        plt.savefig(save_path)
     if return_fig:
         plt.close()
         return fig

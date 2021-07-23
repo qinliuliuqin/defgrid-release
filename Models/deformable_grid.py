@@ -124,32 +124,13 @@ class DeformableGrid(nn.Module):
         n_column_area_normalize = self.grid_size[1]
 
         if not inference:
-            if self.add_mask_variance:
-                tmp_gt_mask = deepcopy(crop_gt)
-                tmp_gt_mask = tmp_gt_mask.long()
-                gt_mask = helpers.gtmask2onehot(tmp_gt_mask).permute(0, 2, 3, 1)
-                superpixel_ret = self.superpixel(grid_pos=pred_points,
-                                                 img_fea=net_input[:, :3, ...].permute(0, 2, 3, 1), \
-                                                 base_triangle2point=base_triangle2point, base_area_mask=base_area_mask,
-                                                 base_triangle_mask=base_triangle_mask, \
-                                                 area_normalize=(n_row_area_normalize, n_column_area_normalize),
-                                                 semantic_mask=gt_mask, inference=inference, grid_size=self.grid_size)
-            else:
-                superpixel_ret = self.superpixel(grid_pos=pred_points,
-                                                 img_fea=net_input[:, :3, ...].permute(0, 2, 3, 1), \
-                                                 base_triangle2point=base_triangle2point, base_area_mask=base_area_mask,
-                                                 base_triangle_mask=base_triangle_mask, \
-                                                 area_normalize=(n_row_area_normalize, n_column_area_normalize),
-                                                 inference=inference, grid_size=self.grid_size)
+            pass
         else:
             superpixel_ret = defaultdict(None)
 
+        condition = None
         if not inference:
-            condition = superpixel_ret['condition']
-            laplacian_loss += output['laplacian_energy']
-            variance += superpixel_ret['variance']
-            area_variance += superpixel_ret['area_variance']
-            reconstruct_loss += superpixel_ret['reconstruct_loss']
+            pass
         else:
             condition = None
         return condition, laplacian_loss, variance, area_variance, reconstruct_loss, pred_points

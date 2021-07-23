@@ -31,6 +31,7 @@ RUN pip3 install ipdb
 RUN pip3 install scikit-learn
 RUN pip3 install tensorboard
 RUN pip3 install tensorboardX
+RUN pip3 install splines
 
 RUN mkdir /work
 WORKDIR /work
